@@ -6,7 +6,7 @@ This simple app, lets you dynamicaly update a DNS record on [Gandi](https://www.
 ### From 0 to running
 
 #### Download the app
-* git clone https://github.com/AlessioCasco/gandi-dyndns
+* git clone https://github.com/AlessioCasco/gandi-dyndns.git
 
 #### Installation
 * Install bottlepy `pip install bottle`
@@ -27,12 +27,12 @@ Default config looks like this:
     "log_file":"./gandi-dyndns.log"}
 }
 ```
-`port`- The HTTP port to listen on
-`bind`- The address that should be bound to for comunication. By default, this is "0.0.0.0", meaning gandi-dyndns will bind to all addresses on the local machine.
-`apikey`- Gandi apikey
-`log_enable`- Enable or Disable logging to file
-`log_level` - Log level to enable, possible values are: INFO, and DEBUG
-`log_file` - Log file relative or absolute path
+- `port`- The HTTP port to listen on
+- `bind`- The address that should be bound to for comunication. By default, this is "0.0.0.0", meaning gandi-dyndns will bind to all addresses on the local machine.
+- `apikey`- Gandi apikey
+- `log_enable`- Enable or Disable logging to file
+- `log_level` - Log level to enable, possible values are: INFO, and DEBUG
+- `log_file` - Log file relative or absolute path
 
 ##### gandi
 In this example, we suppose you want to manage `router.example.com`
@@ -77,7 +77,7 @@ curl -i "http:localhost:8080/nic_update?ip=1.1.1.1&fqdn=router.example.com
 
 
 ### HTTP status codes
-* 200 => All good, 200 is given after updating the IP on Gandi and when there is no need to do so. 
+* 200 => All good, 200 is given after updating the IP on Gandi and when there is no need to do so.
 * 400 => Bad request, some parameters are missing or not formatted correctly.
 * 404 => Not found, No domain found associated with the Gandi API, zone file missing or A record not found into the zone file.
 
