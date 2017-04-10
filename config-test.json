@@ -1,0 +1,8 @@
+{"port":"8080",
+"bind":"0.0.0.0",
+"apikey":"your_gandi_apy_key",
+"logging":{
+	"log_enable":"false",
+	"log_level":"INFO",
+	"log_file":"./gandi-dyndns.log"}
+}
