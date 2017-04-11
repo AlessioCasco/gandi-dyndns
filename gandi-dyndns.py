@@ -161,7 +161,7 @@ def init_application():
     def get_options():
         '''Load options from the command line'''
         default_config = "config.json"
-        parser = OptionParser()
+        parser = OptionParser(usage="usage: %prog [options]")
         parser.add_option(
             "-c",
             "--config",
