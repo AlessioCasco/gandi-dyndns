@@ -9,7 +9,6 @@ gandi-dyndns
 from bottle import route, run, request, response
 from optparse import OptionParser
 import logging as log
-import ConfigParser
 import xmlrpclib
 import json
 import sys
