@@ -68,27 +68,33 @@ def gandi_dyndns():
 
 
 def fetch_parameters():
+    new_ip = ''
     '''Fetch parameters from the GET request'''
     # check for missing parameters
     if not request.GET.ip and not request.GET.fqdn:
         log.error('Received malformed request, both parameters (fqdn & ip) are missing. Got: \"%s\"' % request.url)
         return
     elif not request.GET.ip:
-        log.error('Received malformed request, ip parameter is missing. Got: \"%s\"' % request.url)
-        return
+        new_ip = request.environ.get('REMOTE_ADDR')
+        log.debug('IP parameter is missing, will use client source one: %s' % new_ip)
     elif not request.GET.fqdn:
         log.error('Received malformed request, fqdn parameter is missing. Got: \"%s\"' % request.url)
         return
-    new_ip = request.GET.ip
+    if not new_ip:
+        new_ip = request.GET.ip
     fqdn = request.GET.fqdn
     # check if parameters have correct informations
     fqdn_match = re.match(r'^([a-zA-Z0-9][a-zA-Z0-9-]{1,61})\.([a-zA-Z0-9][a-zA-Z0-9-]{1,61}\.[a-zA-Z]{2,}$)', fqdn)
     ip_match = re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', new_ip)
+    priv_ip_match = re.match(r'^(?:10|127|172\.(?:1[6-9]|2[0-9]|3[01])|192\.168)\..*', new_ip)
     if not fqdn_match and not ip_match:
         log.error('Received invalid values on both parameters. Got fqdn:\"%s\" & IP: %s' % (fqdn, new_ip))
         return
     elif not ip_match:
         log.error('Received invalid ip value. Got %s' % new_ip)
+        return
+    elif priv_ip_match:
+        log.error('Received IP is not a public one. Got %s' % new_ip)
         return
     elif not fqdn_match:
         log.error('Received invalid fqdn value. Got \"%s\"' % fqdn)

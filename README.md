@@ -1,7 +1,6 @@
 gandi-dyndns
 ----
-This simple app, lets you dynamicaly update a DNS record on [Gandi](https://www.gandi.net) registrar using any Cisco router, Cisco ASA firewall or device that is able to send its pubblic IP and fqdn (hostname + domain name) through a GET request.
-
+This simple app, lets you dynamicaly update a DNS record on [Gandi](https://www.gandi.net) registrar using any [Cisco router](http://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/15-mt/dns-15-mt-book/dns-dyn-dns-supp-ios.html#GUID-718C31D9-0D62-4675-B857-A20732374A12), Cisco ASA firewall (with some restrictions) or device that is able to send its pubblic IP and fqdn (hostname + domain name) through a GET request like [dd-wrt](https://www.dd-wrt.com/wiki/index.php/Dynamic_DNS#Custom_.28URL_Updates.29), [openwrt](https://wiki.openwrt.org/doc/howto/ddns.client#custom_service,) [pfsense](https://doc.pfsense.org/index.php/Dynamic_DNS#Custom), [freenas](https://doc.freenas.org/9.3/freenas_services.html#dynamic-dns), [Synology](https://www.synology.com/en-uk/knowledgebase/DSM/help/DSM/AdminCenter/connection_ddns) and many others.
 
 ### From 0 to running
 
@@ -63,7 +62,7 @@ Simply run the script
 This app accepts one optional parameter `-c, --config` that defines the location of the config file, by default this config file has to be in the same directory where `gandi-dyndns.py` is.
 
 ##### Interacion
-Now your router, firewall or network appliance (for info about how to configure a cisco appliances check the config section) can send updates to gandi-dyndns using `GET` method and the app will do the rest.
+Now your router, firewall or network appliance (for info about how to configure a cisco ASA firewall check the config section) can send updates to gandi-dyndns using `GET` method and the app will do the rest.
 
 ```
 $machine_IP/DNS_name:$port/nic_update?ip=$IP&fqdn=$domain
@@ -74,6 +73,8 @@ To test the app manually (be aware that this may update your DNS name) issue thi
 ```bash
 curl -i "http:localhost:8080/nic_update?ip=1.1.1.1&fqdn=router.example.com
 ```
+- `fqdn` This parameter is required and has to be the full FQDN of the device you want to update. e.g. router.example.com
+- `ip`	 This parameter is optional and accepts only pubblic IP's. If none is supplied, the source address that generated the request is considered. This helps clients behind NAT or not able to send their IP to be used as well.
 
 
 ### HTTP status codes
