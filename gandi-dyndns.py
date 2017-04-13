@@ -68,8 +68,8 @@ def gandi_dyndns():
 
 
 def fetch_parameters():
-    new_ip = ''
     '''Fetch parameters from the GET request'''
+    new_ip = ''
     # check for missing parameters
     if not request.GET.ip and not request.GET.fqdn:
         log.error('Received malformed request, both parameters (fqdn & ip) are missing. Got: \"%s\"' % request.url)
