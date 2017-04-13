@@ -1,5 +1,8 @@
 gandi-dyndns
 ----
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b9839366b85b4ba6b4e28d8e757ea0b8)](https://www.codacy.com/app/AlessioCasco/gandi-dyndns?utm_source=github.com&utm_medium=referral&utm_content=AlessioCasco/gandi-dyndns&utm_campaign=badger)
+
 This simple app, lets you dynamicaly update a DNS record on [Gandi](https://www.gandi.net) registrar using any Cisco router, Cisco ASA firewall or device that is able to send its pubblic IP and fqdn (hostname + domain name) through a GET request.
 
 
