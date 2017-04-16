@@ -226,7 +226,6 @@ def init_application():
             print('Bad congig file, log_enable is not set with a correct value, (true|false) are the two only options')
             sys.exit(1)
 
-
     options = get_options()
     config = read_config_file(options.configfile)
     configure_logging(config)
