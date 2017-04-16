@@ -70,6 +70,7 @@ def gandi_dyndns():
 def fetch_parameters():
     '''Fetch parameters from the GET request'''
     new_ip = ''
+    method = request.environ.get('REQUEST_METHOD')
     # check for missing parameters
     if not request.params.ip and not request.params.fqdn:
         log.error('Received malformed request, both parameters (fqdn & ip) are missing. Got: \"%s\"' % request.url)
@@ -99,7 +100,7 @@ def fetch_parameters():
     elif not fqdn_match:
         log.error('Received invalid fqdn value. Got \"%s\"' % fqdn)
         return
-    log.debug('Received request: Got fqdn:\"%s\" & IP: %s' % (fqdn, new_ip))
+    log.debug('Received %s request: fqdn:\"%s\" & IP: %s' % (method, fqdn, new_ip))
     return fqdn, new_ip, fqdn_match
 
 
@@ -205,20 +206,26 @@ def init_application():
 
     def configure_logging(config):
         '''Configure logging'''
-        try:
-            log.basicConfig(
-                format='%(asctime)-15s [%(levelname)s] %(message)s',
-                filename=config['logging']['log_file'],
-                level=config['logging']['log_level'])
-        except ValueError:
-            print('Log level is not set with a correct value, check the README.md for the full list')
-            sys.exit(1)
-        except IOError:
-            print('Unable to create the log file, check if gandi-dyndns has write permissions')
-            sys.exit(1)
         if config['logging']['log_enable'] == "false":
             log.disable('CRITICAL')
-        return
+            return
+        elif config['logging']['log_enable'] == "true":
+            try:
+                log.basicConfig(
+                    format='%(asctime)-15s [%(levelname)s] %(message)s',
+                    filename=config['logging']['log_file'],
+                    level=config['logging']['log_level'])
+            except ValueError:
+                print('Log level is not set with a correct value, check the README.md for the full list')
+                sys.exit(1)
+            except IOError:
+                print('Unable to create the log file, check if gandi-dyndns has write permissions')
+                sys.exit(1)
+            return
+        else:
+            print('Bad congig file, log_enable is not set with a correct value, (true|false) are the two only options')
+            sys.exit(1)
+
 
     options = get_options()
     config = read_config_file(options.configfile)
