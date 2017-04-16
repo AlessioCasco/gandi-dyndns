@@ -17,7 +17,7 @@ import re
 gandi_fqdn_ip = {}
 
 
-@route('/ping')
+@route('/ping', method=['GET', 'POST'])
 def ping():
     '''Function for monitoring/ping'''
     response.headers['Server'] = 'gandi-dyndns'
@@ -25,7 +25,7 @@ def ping():
     return('I\'am alive!\n')
 
 
-@route('/nic_update')
+@route('/nic_update', method=['GET', 'POST'])
 def gandi_dyndns():
     '''Main function'''
     response.headers['Server'] = 'gandi-dyndns'
@@ -71,18 +71,18 @@ def fetch_parameters():
     '''Fetch parameters from the GET request'''
     new_ip = ''
     # check for missing parameters
-    if not request.GET.ip and not request.GET.fqdn:
+    if not request.params.ip and not request.params.fqdn:
         log.error('Received malformed request, both parameters (fqdn & ip) are missing. Got: \"%s\"' % request.url)
         return
-    elif not request.GET.ip:
+    elif not request.params.ip:
         new_ip = request.environ.get('REMOTE_ADDR')
         log.debug('IP parameter is missing, will use client source one: %s' % new_ip)
-    elif not request.GET.fqdn:
+    elif not request.params.fqdn:
         log.error('Received malformed request, fqdn parameter is missing. Got: \"%s\"' % request.url)
         return
     if not new_ip:
-        new_ip = request.GET.ip
-    fqdn = request.GET.fqdn
+        new_ip = request.params.ip
+    fqdn = request.params.fqdn
     # check if parameters have correct informations
     fqdn_match = re.match(r'^([a-zA-Z0-9][a-zA-Z0-9-]{1,61})\.([a-zA-Z0-9][a-zA-Z0-9-]{1,61}\.[a-zA-Z]{2,}$)', fqdn)
     ip_match = re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', new_ip)
